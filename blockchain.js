@@ -1,11 +1,12 @@
-import Block from 'block';
+import Block from './block';
 
 class Blockchain {
   constructor () {
     const genesisBlock = new Block(0, 0, 1527403272996, null, 'C69240790FAA1647ED9FEC3118EDCB74DF4705A6C4A295BBA01A46DFC57328AD');
     this.chain = [];
     this.current_transactions = [];
-    chain.push(genesisBlock);
+    this.chain.push(genesisBlock);
+    console.log(this.chain);
     // this.newBlock = this.newBlock.bind(this)
     // this.newTransaction = this.newTransaction.bind(this)
     // this.lastBlock = this.lastBlock.bind(this)
@@ -22,5 +23,9 @@ class Blockchain {
 
   lastBlock () { /* return the last block */}
 }
+
+let abc = new Blockchain;
+
+
 
 module.exports = Blockchain
