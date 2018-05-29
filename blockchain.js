@@ -1,4 +1,5 @@
 import Block from './block';
+import cryptoJS from 'crypto-js';
 
 class Blockchain {
   constructor () {
@@ -13,18 +14,39 @@ class Blockchain {
     // this.proofOfWork = this.proofOfWork.bind(this)
   }
 
-  newBlock () {
-    // Date().getTime() / 1000;
+  newBlock (blockData) {
+    const nextIndex = this.chain.length;
+    const previousHash = this.lastBlock().hash;
+    const nextTimestamp = new Date().getTime();
+    const block = new Block(
+      nextIndex,
+      previousHash,
+      nextTimestamp,
+      blockData,
+      this.hash(nextIndex, previousHash, nextTimestamp, blockData));
+    this.chain.push(block);
   }
 
   newTransaction () { /* Store a new transaction */ }
 
-  hash (block) { /* hash the block */ }
+  hash (nextIndex, previousHash, timestamp, blockData) {
+    return cryptoJS.SHA256(nextIndex + previousHash + timestamp + blockData).toString();
+  }
 
-  lastBlock () { /* return the last block */}
+  lastBlock () {
+    return this.chain.slice(-1)[0];
+  }
+
+  getChain() {
+    return this.chain;
+  }
 }
 
 let abc = new Blockchain;
+
+abc.newBlock(`return some shit`);
+
+console.log(abc.getChain());
 
 
 
