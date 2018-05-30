@@ -7,11 +7,6 @@ class Blockchain {
     this.chain = [];
     this.current_transactions = [];
     this.chain.push(genesisBlock);
-    console.log(this.chain);
-    // this.newBlock = this.newBlock.bind(this)
-    // this.newTransaction = this.newTransaction.bind(this)
-    // this.lastBlock = this.lastBlock.bind(this)
-    // this.proofOfWork = this.proofOfWork.bind(this)
   }
 
   newBlock (blockData) {
@@ -25,9 +20,13 @@ class Blockchain {
       blockData,
       this.hash(nextIndex, previousHash, nextTimestamp, blockData));
     this.chain.push(block);
+    //push to sqs
   }
 
-  newTransaction () { /* Store a new transaction */ }
+  newTransaction (data) {
+    this.current_transactions.push(data);
+    //send this to sqs.
+  }
 
   hash (nextIndex, previousHash, timestamp, blockData) {
     return cryptoJS.SHA256(nextIndex + previousHash + timestamp + blockData).toString();
@@ -41,13 +40,5 @@ class Blockchain {
     return this.chain;
   }
 }
-
-let abc = new Blockchain;
-
-abc.newBlock(`return some shit`);
-
-console.log(abc.getChain());
-
-
 
 module.exports = Blockchain
