@@ -18,7 +18,8 @@ class Blockchain {
       previousHash,
       nextTimestamp,
       blockData,
-      this.hash(nextIndex, previousHash, nextTimestamp, blockData));
+      this.hash(nextIndex, previousHash, nextTimestamp, blockData),
+      this.proofOfWork(this.lastBlock().magicStuff));
     this.chain.push(block);
     //push to sqs
   }
@@ -38,6 +39,9 @@ class Blockchain {
 
   getChain() {
     return this.chain;
+  }
+  proofOfWork() {
+    return 1233;
   }
 }
 
