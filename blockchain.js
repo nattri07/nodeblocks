@@ -1,15 +1,17 @@
 import Block from './block';
 import cryptoJS from 'crypto-js';
+import config from './config.json';
 
 class Blockchain {
   constructor () {
-    const genesisBlock = new Block(0, 0, 1527403272996, null, 'C69240790FAA1647ED9FEC3118EDCB74DF4705A6C4A295BBA01A46DFC57328AD', 9876543210);
+    const genesisBlock = new Block(0, 0, 1527403272996, null, 1);
     this.chain = [];
     this.current_transactions = [];
     this.chain.push(genesisBlock);
   }
 
-  newBlock (blockData) {
+  newBlock (blockData, difficulty) {
+    console.log("difficulty", difficulty);
     const nextIndex = this.chain.length;
     const previousHash = this.lastBlock().hash;
     const nextTimestamp = new Date().getTime();
@@ -18,19 +20,15 @@ class Blockchain {
       previousHash,
       nextTimestamp,
       blockData,
-      this.hash(nextIndex, previousHash, nextTimestamp, blockData),
-      this.proofOfWork(this.lastBlock().magicStuff));
+      difficulty);
     this.chain.push(block);
+    this.current_transactions = [];
     //push to sqs
   }
 
   newTransaction (data) {
     this.current_transactions.push(data);
     //send this to sqs.
-  }
-
-  hash (nextIndex, previousHash, timestamp, blockData) {
-    return cryptoJS.SHA256(nextIndex + previousHash + timestamp + blockData).toString();
   }
 
   lastBlock () {
@@ -40,9 +38,7 @@ class Blockchain {
   getChain() {
     return this.chain;
   }
-  proofOfWork() {
-    return 1233;
-  }
+  
 }
 
 module.exports = Blockchain
